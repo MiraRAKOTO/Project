@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Douane Login</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  <!-- Favicons -->
+
+  <link th:href="@{/img/LogoDouane.png}" rel="icon">
+  <link th:href="@{/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css" >
+
+
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4 contentLog">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <div class="card mb-1">
+
+
+                <div class="card-body">
+                  <span class="d-none d-lg-block text-center pt-3"><img th:src="@{/img/LogoHelpDouane.png}" width="250"alt=""></span>
+                 <div class="pb-2">
+                   <h3 class="card-title text-center pb-3 fs-4" style="color: #005a87;">SE CONNECTER</h3>
+                 </div>
+
+                  <form class="row g-3 needs-validation" th:action="@{/login}" method="post" >
+
+                    <div class="col-12">
+                      <label for="yourUsername" class="form-label">Nom d'utilisateur</label>
+                      <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <input type="email" name="username" class="form-control" id="yourUsername" required placeholder="adresse e-mail">
+                        <div class="invalid-feedback">Veuillez remplir votre nom d'utilisateur</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label">Password</label>
+                      <input type="password" name="password" class="form-control" id="yourPassword" required placeholder="password">
+                      <div class="invalid-feedback">Veuillez remplir votre mot de passe!</div>
+                    </div>
+                    <div class="col-12">
+                     
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0 text-center linkLog"><a href="pages-register.html">Mot de passe oublié</a></p>
+                    </div>
+    
+                    </div>
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" type="submit">SE CONNECTER</button>
+                    </div>
+                  
+                  </form>
+                <div class="error">
+                  <p class="error-msg" th:if="${param.error}">adresse e-mail ou mot de passe non valide...</p>
+                  <p class="error-msg" th:if="${param.logout}">vous êtes déconnecté</p>
+                </div>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script th:src="@{/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/vendor/chart.js/chart.min.js}"></script>
+  <script th:src="@{/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/vendor/quill/quill.min.js}"></script>
+  <script th:src="@{/vendor/simple-datatables/simple-datatables.js}"></script>
+  <script th:src="@{/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/vendor/php-email-form/validate.js}"></script>
+
+  <!-- Template Main JS File -->
+  <script th:src="@{/js/main.js}"></script>
+
+</body>
+
+</html>

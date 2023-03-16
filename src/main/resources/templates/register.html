@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Douane Login</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet">
+
+
+    <!-- Vendor CSS Files -->
+
+    <link type="text/css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet" >
+  <link type="text/css" th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link type="text/css" th:href="@{/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link type="text/css" th:href="@{/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link type="text/css" th:href="@{/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link type="text/css" th:href="@{/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link type="text/css" th:href="@{/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<main>
+
+    <div class="container-register d-flex flex-column align-items-center justify-content-center">
+
+        <form class="row content" role="form" autocomplete="off"
+              th:object="${agentForm}"
+              th:action="${editMode} ?@{/editAgent} :@{/agentForm}" method="post">
+            <div class="header-register d-flex justify-content-arround mb-3">
+                <a th:href="@{/login}"><i class="bi bi-arrow-left"></i></a>
+                <h3 class="title-register">CREER UN NOUVEAU COMPTE</h3>
+            </div>
+            <fieldset class="col-md-6 borderF">
+
+                <legend class="borderF">Information personnelle</legend>
+                <div class="form-group pt-2">
+                    <label>Numéro Matricule:</label>
+                    <input class="form-control" placeholder="Matricule" th:field="${agentForm.numMatAgent}">
+                </div>
+
+                <div class="form-group pt-2">
+                    <label>Nom:</label>
+                    <input class="form-control" placeholder="Nom" th:field="${agentForm.nomAgent}">
+                </div>
+
+                <div class="form-group pt-2">
+                    <label>Prénoms:</label>
+                    <input class="form-control" placeholder="Prénom" th:field="${agentForm.prenomAgent}">
+                </div>
+
+                <div class="form-group pt-2">
+                    <label>Email:</label>
+                    <input class="form-control" type="email" placeholder="email" th:field="${agentForm.username}">
+                </div>
+
+                <div class="form-group pt-2">
+                    <label>Téléphone:</label>
+                    <input class="form-control" placeholder="telephone" th:field="${agentForm.telAgent}">
+                </div>
+
+                <div class="form-group pt-2">
+                    <label>Mot de passe:</label>
+                    <input type="password" class="form-control" placeholder="mot de passe"
+                           th:field="${agentForm.password}">
+                </div>
+
+                <div class="form-group pt-2">
+                    <label>Confirmation de mot de passe:</label>
+                    <input type="password" class="form-control" th:field="${agentForm.confirmPassword}">
+                </div>
+            </fieldset>
+
+            <div class="col-md-6 departement">
+                <div class="row">
+                    <div class="upload" >
+                        <img id="frame"  width="150px" height="150px" /> 
+                        <div class="round" >
+                            <!-- <input type="image" th:field="${agentForm.photoAgent}"> --> 
+
+                            <input
+                            onchange="loadImg()"
+                             class="rounded-circle" name="file" type="file" id="formFile">
+                             <i class="bi bi-camera-fill" style="color: white;"></i>
+                            
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt-4" th:object="${fichePosteForm}">
+                    <fieldset class="">
+                        <legend>Information sur le poste</legend>
+                        <div class="row pt-2">
+                            <div class="col-6 ">
+                                <div class="form-group pt-2">
+                                    <label class=" col-form-label">Type hierarchie:</label>
+                                    <div class="">
+                                        <select class="form-select" aria-label="Default select example" id="typeHierarchie" th:onchange="'javascript:getHierarchie();'">
+                                            <option ></option>
+                                            <option th:each="typeH :${typeHierarchie}" th:value="${typeH.idType}"
+                                                    th:text="${typeH.libelleType}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <!--<div class="form-group pt-2">
+                                    <label class=" col-form-label">Nom hierarchie: </label>
+                                    <div class="">
+                                        <select class="form-select" aria-label="Default select example" id="hierarchie" th:field="${fichePosteForm.hierarchieFich.idHier}" >
+                                            <option th:value="0"></option>
+                                        </select>
+                                    </div>
+                                </div>-->
+
+                                <div class="form-group pt-2">
+                                    <label class=" col-form-label">Fonction : </label>
+                                    <div class="">
+                                        <select class="form-select" aria-label="Default select example" th:field="${fichePosteForm.posteFich.idPoste}">
+                                            <option th:value="0"></option>
+                                            <option th:each="post :${postes}" th:value="${post.idPoste}"
+                                                    th:text="${post.fonctionPoste}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group pt-2">
+                                    <label class=" col-form-label">Ville: </label>
+                                    <div class="">
+                                        <select class="form-select" aria-label="Default select example" id="villeId" th:onchange="'javascript:getQuartier();'">
+                                            <option ></option>
+                                            <option th:each="vil :${villes}" th:value="${vil.idVille}"
+                                                    th:text="${vil.libelleVille}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group pt-2">
+                                    <label class=" col-form-label">Quartier: </label>
+                                    <div class="">
+                                        <select class="form-select" aria-label="Default select example" id="quartier">
+                                            <option ></option>
+                                        </select>
+                                    </div>
+                                </div>
+                              
+                            <!--<div class="col-12">
+                                <label class=" col-form-label">Sous categorie : </label>
+                                <div class="">
+                                    <select class="form-select" aria-label="Default select example" th:field="${fichePosteForm.CatFich.idSCat}">
+                                        <option th:value="0"></option>
+                                        <option th:each="souscat :${souscateg}" th:value="${souscat.idSCat}"
+                                                th:text="${souscat.libelleSCat}"></option>
+                                    </select>
+                                </div>
+                            </div>-->
+                        </div>
+
+                    </fieldset>
+                </div>
+                <div class="alert alert-danger text-center"
+                     th:if="${formErrorMessage}" th:text="${formErrorMessage}" th:utext="#{message.error}"></div>
+                <div class="alert alert-success text-center d-none" id="formSuccess"
+                     th:if="${editMode}" th:utext="#{message.success}"></div>
+
+                <button type="submit" class="btn btn-default mt-5 createUser">Créer</button>
+        </form>
+
+    </div>
+
+
+    </div>
+    </div>
+    </div>
+
+    </section>
+
+    </div>
+</main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/chart.js/chart.min.js}"></script>
+<script th:src="@{/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+<script type="text/javascript">
+    function loadImg(){
+    $('#frame').attr('src', URL.createObjectURL(event.target.files[0]));
+}
+    function getHierarchie() {
+
+        var typeId = $("#typeHierarchie").val();
+        var urlString = "[[@{'/hierarchieList/'}]]"+ typeId;
+        $('#hierarchie').empty().append('<option ></option>');
+
+        $.ajax({methode: "GET", url: urlString})
+            .done(function(responseJson) {
+                var hierarchieDropDow = $("#hierarchie");
+                $.each(responseJson, function(index, hierarchie) {
+                    $("<option>").val(hierarchie.idHier).text(hierarchie.libelleHier).appendTo(hierarchieDropDow);
+                });
+            })
+            .fail(function(){
+                //alert("Error get data");
+            });
+
+    }
+
+    function getQuartier() {
+
+        var villeId = $("#villeId").val();
+        var urlString = "[[@{'/quartierList/'}]]"+ villeId;
+        $('#quartier').empty().append('<option ></option>');
+
+        $.ajax({methode: "GET", url: urlString})
+            .done(function(responseJson) {
+                var quartierDropDow = $("#quartier");
+                $.each(responseJson, function(index, quartier) {
+                    $("<option>").val(quartier.idQuartier).text(quartier.libelleQuartier).appendTo(quartierDropDow);
+                });
+            })
+            .fail(function(){
+                //alert("Error get data");
+            });
+
+    }
+</script>
+
+</body>
+
+</html>

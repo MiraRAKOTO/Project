@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Acceuil </title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+
+    <link th:href="@{/img/LogoDouane.png}" rel="icon">
+    <link th:href="@{/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link type="text/css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+
+        <link rel="stylesheet" th:href="@{/css/jquery.treetable.css}"/>
+        <link rel="stylesheet" th:href="@{/css/jquery.treetable.theme.default.css}"/>
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin - v2.4.1
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <span class="d-none d-lg-block pt-5 pb-2"><img th:src=@{/img/LogoHelpDouane.png} alt="" width="200"></span>
+        <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <span class="d-none d-md-block dropdown-toggle ps-2"
+                          th:text="${#authentication.getPrincipal().getUsername()}"></span>
+                </a><!-- End Profile Iamge Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>
+                            <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">Administrateur</span>
+                            <span th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">Disptacher</span>
+                            <span th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasRole(''ROLE_USER'')')}">Utilisateur</span>
+                        </h6>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="ParamètreCompte.html">
+                            <i class="bi bi-gear"></i>
+                            <span>Paramètre de compte</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/login?logout}">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Déconnexion</span>
+                        </a>
+                    </li>
+
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+        </ul>
+    </nav><!-- End Icons Navigation -->
+
+</header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+
+<aside id="sidebar" class="sidebar" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+  <ul class="sidebar-nav mt-5" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link " th:href="@{/home}">
+        <i class="bi bi-grid"></i>
+        <span>Acceuil</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/agent}">
+        <i class="bi bi-list-task"></i>
+        <span>Gérer Agent</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/hierarchie}">
+                <i class="bi bi-list-task"></i>
+                <span>Gérer Hierarchie</span>
+            </a>
+    </li>
+
+   <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/post}">
+        <i class="bi bi-chat-left-dots-fill"></i>
+        <span>Gérer Poste</span>
+      </a>
+    </li><li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/problemeCateg}">
+        <i class="bi bi-list-task"></i>
+        <span>Liste Catégorie de problèmes</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{'/problemeList/'+'all'}">
+        <i class="bi bi-list-task"></i>
+        <span>Liste des problèmes existants</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{'/problemView/'+${#authentication.getPrincipal().getUsername()}}">
+        <i class="bi bi-chat-left-dots-fill"></i>
+        <span>Signaler problème</span>
+      </a>
+    </li>
+
+
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-collection-fill"></i><span>Boîte de reception</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a th:href="@{'/problemRecep/'+${#authentication.getPrincipal().getUsername()}+'/'+'all'}">
+            <i class="bi bi-circle"></i><span>Problèmes</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{'/problemRepons/'+${#authentication.getPrincipal().getUsername()}}">
+            <i class="bi bi-circle"></i><span>Réponses</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Boîte de reception -->
+
+    
+ 
+</aside>
+
+<aside id="sidebar" class="sidebar" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+
+    <ul class="sidebar-nav mt-5" id="sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link " th:href="@{/home}">
+                <i class="bi bi-grid"></i>
+                <span>Acceuil</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/problemeCateg}">
+                <i class="bi bi-list-task"></i>
+                <span>Liste Catégorie de problèmes</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{'/problemeList/'+'all'}">
+                <i class="bi bi-list-task"></i>
+                <span>Liste des problèmes existants</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{'/problemView/'+${#authentication.getPrincipal().getUsername()}}">
+                <i class="bi bi-chat-left-dots-fill"></i>
+                <span>Signaler problème</span>
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-collection-fill"></i><span>Boîte de reception</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{'/problemRecep/'+${#authentication.getPrincipal().getUsername()}+'/'+'all'}">
+                        <i class="bi bi-circle"></i><span>Problèmes</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{'/problemRepons/'+${#authentication.getPrincipal().getUsername()}}">
+                        <i class="bi bi-circle"></i><span>Réponses</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Boîte de reception -->
+
+        
+
+        <li class="nav-item">
+            <a class="nav-link collapsed"  th:href="@{/categorie}">
+                <i class="bi bi-cursor-fill"></i>
+                <span>Gérer Catégorie</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/fichPoste}">
+                <i class="bi bi-cursor-fill"></i>
+                <span>Gérer fiche de Poste</span>
+            </a>
+        </li>
+</aside><!-- End Sidebar-->
+
+<aside id="sidebar" class="sidebar" th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasRole(''ROLE_USER'')')}">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+        <li class="nav-item">
+            <a class="nav-link " th:href="@{/home}">
+                <i class="bi bi-grid"></i>
+                <span>Acceuil</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/problemeCateg}">
+                <i class="bi bi-list-task"></i>
+                <span>Liste Catégorie de problèmes</span>
+            </a>
+        </li>
+		
+		<li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{'/problemeList/'+'all'}">
+                <i class="bi bi-list-task"></i>
+                <span>Liste des problèmes existants</span>
+            </a>
+        </li>
+		
+		<li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-collection-fill"></i><span>Boîte de reception</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{'/problemRecep/'+${#authentication.getPrincipal().getUsername()}+'/'+'all'}">
+                        <i class="bi bi-circle"></i><span>Problèmes</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{'/problemRepons/'+${#authentication.getPrincipal().getUsername()}}">
+                        <i class="bi bi-circle"></i><span>Réponses</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Boîte de reception -->
+		
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{'/problemView/'+${#authentication.getPrincipal().getUsername()}}">
+                <i class="bi bi-chat-left-dots-fill"></i>
+                <span>Signaler problème</span>
+            </a>
+        </li>
+    </aside>
+
+<main id="main" class="main">
+
+ 
+    <div class="pagetitle">
+        <div class="pagetitle mt-5 mb-3">
+            <h1> <i class="bi bi-list-nested" style="font-size: 35px;"></i>GESTION CATEGORIE</h1>
+        </div><!-- End Page Title -->
+        <hr style="color: #E5C500; border:2px solid;">
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="search-bar">
+                <form class="search-form d-flex align-items-center" method="POST" action="#">
+                    <div class="row">
+                        <div class="col-11">
+                            <input type="text" class="form-control" name="query" placeholder="Rechercher"
+                                   title="Enter search keyword" id="find">
+                        </div>
+                        <div class="col-1">
+                            <button type="button" title="Search" th:onclick="'javascript:findCat();'"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- End Search Bar -->
+        </div>
+        <div class="row mt-5">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item" th:each="categ: ${categList}">
+                    <h2 class="accordion-header" th:attr="id='headingOne' + ${categ.idCat}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                th:attr="aria-controls='collapse' + ${categ.idCat}, data-bs-target='#collapse' + ${categ.idCat}"
+                                th:text="${categ.libelleCat}">
+                            <!--th:data-parameter="${categ.idCat}" th:onclick="getSouscat(this.getAttribute('data-parameter'));"-->
+                        </button>
+                        <input type="hidden" id="categorieId" th:value="${categ.idCat}">
+                    </h2>
+                    <div th:attr="id='collapse' + ${categ.idCat}, aria-labelledby='headingOne' + ${categ.idCat}"
+                         class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <table th:attr="id='treeTable' + ${categ.idCat}" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Sous catégorie</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                            </table>
+                            <div class="row">
+                                <div class="col-3">
+                                    <select class="form-select" aria-label="Default select example"
+                                            th:attr="id='sousCat' + ${categ.idCat}">
+                                        <option value="0"></option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <input type="text" th:attr="id='sousCatAdd' + ${categ.idCat}" class="form-control"
+                                           placeholder="nouveau sous catégorie">
+                                </div>
+                                <div class="col-3">
+                                    <input type="text" th:attr="id='sousCatDesc' + ${categ.idCat}" class="form-control"
+                                           placeholder="Description">
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-primary" th:data-parameter="${categ.idCat}"
+                                            th:onclick="addSousCat(this.getAttribute('data-parameter'));">Ajouter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="row">
+                <div class="col-4">
+                    <input type="text" id="catAdd" class="form-control" placeholder="nouveau catégorie a ajouté">
+                </div>
+                <div class="col-4">
+                    <input type="text" id="catDesc" class="form-control" placeholder="Description">
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary" th:onclick="'javascript:addCat();'">Ajouter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="row mt-2" style="margin-top:150px;">
+            <div id="bs-treeetable" class="treetable">
+                Chargement ...
+            </div>
+        </div> -->
+
+
+    </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
+<!-- Vendor JS Files -->
+<script th:src="@{/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/chart.js/chart.min.js}"></script>
+<script th:src="@{/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/vendor/php-email-form/validate.js}"></script>
+
+<!--<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>-->
+<script th:src="@{/js/jquery.treetable.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.edittreetable.js}"></script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        var urlString = "[[@{'/getAllCategorieListe/All'}]]";
+        $.ajax({methode: "GET", url: urlString})
+            .done(function (responseJson) {
+
+                $("#bs-treeetable").bstreetable({
+                        data: responseJson,
+                        maintitle: "Catégories",
+                        nodeaddCallback: function (data, callback) {
+                            urlString = "[[@{'/addSCat/'}]]" + data.name + '/' + data.idSCat;
+                            $.ajax({methode: "GET", url: urlString})
+                                .done(function (responseJson) {
+
+                                })
+                                .fail(function () {
+                                        //alert("Error get data");
+                                    });
+                            callback();
+                        },
+                        noderemoveCallback: function (data, callback) {
+                            urlString = "[[@{'/deleteCat/'}]]" + data;
+                            $.ajax({methode: "GET", url: urlString})
+                                .done(function (responseJson) {
+
+                                })
+                                .fail(function () {
+                                    //alert("Error get data");
+                                });
+                            callback();
+                        },
+                        nodeupdateCallback: function (data, callback) {
+                            urlString = "[[@{'/updateCat/'}]]" + data.idCat + '/' + data.name;
+                            $.ajax({methode: "GET", url: urlString})
+                                .done(function (responseJson) {
+
+                                })
+                                .fail(function () {
+                                    //alert("Error get data");
+                                });
+                            callback();
+                        }
+                    }
+                );
+
+            })
+            .fail(function () {
+                //alert("Error get data");
+            });
+    });
+
+
+
+
+
+    $(".accordion-item").each(function () {
+        var idCat = $(this).children(".accordion-header").children("#categorieId").val(); //$("#categorieId").val();
+        var urlString = "[[@{'/sousCategorieListe/'}]]" + idCat;
+        $.ajax({methode: "GET", url: urlString})
+            .done(function (responseJson) {
+                var sousCat = $("#sousCat" + idCat);
+                $.each(responseJson, function (idx, souscategorie) {
+                    $("#treeTable" + idCat).append("<tr data-tt-id=\"" + souscategorie.idCat + "\" data-tt-parent-id=\"" + souscategorie.idSCat + "\"><td>" + souscategorie.libelleCat + "</td><td><button type=\"button\" class=\"btn btn-outline-primary btn-sm\" id=\"" + souscategorie.idCat + "\">Modifier</button><button type=\"button\" class=\"btn btn-outline-danger btn-sm\" id=\"" + souscategorie.idSCat + "\">Supprimer</button></td></tr>");
+                    $("<option>").val(souscategorie.idCat).text(souscategorie.libelleCat).appendTo(sousCat);
+                });
+                $("#treeTable" + idCat).treetable({
+                    expandable: true,
+                    initialState: "contracted",
+                    clickableNodeNames: true,
+                    indent: 30
+                });
+            })
+            .fail(function () {
+                //alert("Error get data");
+            });
+    });
+
+    function addSousCat(idCat) {
+        var sousCatId = $("#sousCat" + idCat).val();
+        var name = $("#sousCatAdd" + idCat).val();
+        var desc  = $("#sousCatDesc" + idCat).val();
+        var urlString = "[[@{'/addSousCat/'}]]" + idCat + '/' + sousCatId + '/' + name + '/' + desc;
+
+        $.ajax({methode: "GET", url: urlString})
+            .done(function (responseJson) {
+                location.reload();
+            })
+            .fail(function () {
+                //alert("Error get data");
+            });
+    }
+
+    function addCat() {
+        var name = $("#catAdd").val();
+        var desc = $("#catDesc").val();
+        var urlString = "[[@{'/addCat/'}]]" + name + '/' + desc;
+
+        $.ajax({methode: "GET", url: urlString})
+            .done(function (responseJson) {
+                location.reload();
+            })
+            .fail(function () {
+                //alert("Error get data");
+            });
+    }
+
+    function findCat() {
+        var name = $("#find").val();
+        var urlString = "[[@{'/getAllCategorieListe/'}]]" + name;
+
+        $.ajax({methode: "GET", url: urlString})
+            .done(function (responseJson) {
+                $("#bs-treeetable").bstreetable({
+                    data: responseJson,
+                    maintitle: "Catégories",
+                    nodeaddCallback: function (data, callback) {
+                        urlString = "[[@{'/addSCat/'}]]" + data.name + '/' + data.idSCat;
+                        $.ajax({methode: "GET", url: urlString})
+                            .done(function (responseJson) {
+
+                            })
+                            .fail(function () {
+                                //alert("Error get data");
+                            });
+                        callback();
+                    },
+                    noderemoveCallback: function (data, callback) {
+                        urlString = "[[@{'/deleteCat/'}]]" + data;
+                        $.ajax({methode: "GET", url: urlString})
+                            .done(function (responseJson) {
+
+                            })
+                            .fail(function () {
+                                //alert("Error get data");
+                            });
+                        callback();
+                    },
+                    nodeupdateCallback: function (data, callback) {
+                        urlString = "[[@{'/updateCat/'}]]" + data.idCat + '/' + data.name;
+                        $.ajax({methode: "GET", url: urlString})
+                            .done(function (responseJson) {
+
+                            })
+                            .fail(function () {
+                                //alert("Error get data");
+                            });
+                        callback();
+                    }
+                })
+            })
+            .fail(function () {
+                //alert("Error get data");
+            });
+    }
+</script>
+
+
+</body>
+
+</html>

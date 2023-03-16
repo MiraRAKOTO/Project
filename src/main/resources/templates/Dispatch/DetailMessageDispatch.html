@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Acceuil </title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+
+    <link th:href="@{/img/LogoDouane.png}" rel="icon">
+    <link th:href="@{/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link type="text/css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+
+    <style>
+        body {font-family: Arial, Helvetica, sans-serif;}
+        
+        #myImg {
+          border-radius: 5px;
+          cursor: pointer;
+          transition: 0.3s;          
+        }
+        
+        #myImg:hover {opacity: 0.7;}
+        
+        /* The Modal (background) */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          padding-top: 100px; /* Location of the box */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+        }
+        
+        /* Modal Content (image) */
+        .modal-content {
+          margin: auto;
+          display: block;
+          width: 80%;
+          max-width: 700px;
+        }
+        
+        /* Caption of Modal Image */
+        #caption {
+          margin: auto;
+          display: block;
+          width: 80%;
+          max-width: 700px;
+          text-align: center;
+          color: #ccc;
+          padding: 10px 0;
+          height: 150px;
+        }
+        
+        /* Add Animation */
+        .modal-content, #caption {  
+          -webkit-animation-name: zoom;
+          -webkit-animation-duration: 0.6s;
+          animation-name: zoom;
+          animation-duration: 0.6s;
+        }
+        
+        @-webkit-keyframes zoom {
+          from {-webkit-transform:scale(0)} 
+          to {-webkit-transform:scale(1)}
+        }
+        
+        @keyframes zoom {
+          from {transform:scale(0)} 
+          to {transform:scale(1)}
+        }
+        
+        /* The Close Button */
+        .close {
+          position: absolute;
+          top: 15px;
+          right: 35px;
+          color: #f1f1f1;
+          font-size: 40px;
+          font-weight: bold;
+          transition: 0.3s;
+        }
+        
+        .close:hover,
+        .close:focus {
+          color: #bbb;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        
+        /* 100% Image Width on Smaller Screens */
+        @media only screen and (max-width: 700px){
+          .modal-content {
+            width: 100%;
+          }
+        }
+        </style>
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin - v2.4.1
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <span class="d-none d-lg-block pt-5 pb-2"><img th:src=@{/img/LogoHelpDouane.png} alt="" width="200"></span>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+
+                <li class="nav-item dropdown pe-3">
+
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+
+                        <span class="d-none d-md-block dropdown-toggle ps-2"
+                            th:text="${#authentication.getPrincipal().getUsername()}"></span>
+                    </a><!-- End Profile Iamge Icon -->
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>
+                                <span
+                                    th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">Administrateur</span>
+                                <span th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">Dispatcher</span>
+                                <span
+                                    th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasRole(''ROLE_USER'')')}">Utilisateur</span>
+                            </h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="ParamètreCompte.html">
+                                <i class="bi bi-gear"></i>
+                                <span>Paramètre de compte</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" th:href="@{/login?logout}">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Déconnexion</span>
+                            </a>
+                        </li>
+
+                    </ul><!-- End Profile Dropdown Items -->
+                </li><!-- End Profile Nav -->
+
+            </ul>
+        </nav><!-- End Icons Navigation -->
+
+    </header><!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+
+    <aside id="sidebar" class="sidebar" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+
+        <ul class="sidebar-nav mt-5" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link " th:href="@{/home}">
+                    <i class="bi bi-grid"></i>
+                    <span>Acceuil</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/agent}">
+                    <i class="bi bi-list-task"></i>
+                    <span>Gérer Agent</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/hierarchie}">
+                    <i class="bi bi-list-task"></i>
+                    <span>Gérer Hierarchie</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/post}">
+                    <i class="bi bi-chat-left-dots-fill"></i>
+                    <span>Gérer Poste</span>
+                </a>
+            </li>
+            </ul>
+    </aside>
+
+    <aside id="sidebar" class="sidebar" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link " th:href="@{/home}">
+                    <i class="bi bi-grid"></i>
+                    <span>Acceuil</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/problemeCateg}">
+                    <i class="bi bi-list-task"></i>
+                    <span>Liste Catégorie de problèmes</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{'/problemeList/'+'all'}">
+                    <i class="bi bi-list-task"></i>
+                    <span>Liste des problèmes existants</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed"
+                    th:href="@{'/problemView/'+${#authentication.getPrincipal().getUsername()}}">
+                    <i class="bi bi-chat-left-dots-fill"></i>
+                    <span>Signaler problème</span>
+                </a>
+            </li>
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-collection-fill"></i><span>Boîte de reception</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a th:href="@{'/problemRecep/'+${#authentication.getPrincipal().getUsername()}+'/'+'all'}">
+                            <i class="bi bi-circle"></i><span>Problèmes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{'/problemRepons/'+${#authentication.getPrincipal().getUsername()}}">
+                            <i class="bi bi-circle"></i><span>Réponses</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End Boîte de reception -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="BoiteEnvoie.html">
+                    <i class="bi bi-cursor-fill"></i>
+                    <span>Boîte d'envoi</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/categorie}">
+                    <i class="bi bi-cursor-fill"></i>
+                    <span>Gérer Catégorie</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/fichPoste}">
+                    <i class="bi bi-cursor-fill"></i>
+                    <span>Gérer fiche de Poste</span>
+                </a>
+            </li>
+            </ul>
+    </aside><!-- End Sidebar-->
+
+    <aside id="sidebar" class="sidebar" th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} OR ${#authorization.expression('hasRole(''ROLE_USER'')')}">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+    
+            <li class="nav-item">
+                <a class="nav-link " th:href="@{/home}">
+                    <i class="bi bi-grid"></i>
+                    <span>Acceuil</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+    
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/problemeCateg}">
+                    <i class="bi bi-list-task"></i>
+                    <span>Liste Catégorie de problèmes</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{'/problemeList/'+'all'}">
+                    <i class="bi bi-list-task"></i>
+                    <span>Liste des problèmes existants</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-collection-fill"></i><span>Boîte de reception</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a th:href="@{'/problemRecep/'+${#authentication.getPrincipal().getUsername()}+'/'+'all'}">
+                            <i class="bi bi-circle"></i><span>Problèmes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{'/problemRepons/'+${#authentication.getPrincipal().getUsername()}}">
+                            <i class="bi bi-circle"></i><span>Réponses</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End Boîte de reception -->
+            
+    
+    
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{'/problemView/'+${#authentication.getPrincipal().getUsername()}}">
+                    <i class="bi bi-chat-left-dots-fill"></i>
+                    <span>Signaler problème</span>
+                </a>
+            </li>
+        </aside>
+
+
+    <main id="main" class="main-detail">
+
+        <section class="section dashboard">
+
+            <!-- Accordion without outline borders -->
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+
+                            <div class="col p-3">
+                                <p><span>De: </span><span
+                                        th:text="${pblmView.agentProb.nomAgent}+ ' '+${pblmView.agentProb.prenomAgent}"></span>
+                                </p>
+                                <h6>Titre du probleme : <span th:text="${pblmView.getLibelleProb()}"></span></h6>
+                                <p><span>Déscription : </span><span th:text="${pblmView.getDescriptionProb()}"></span>
+                                </p>
+                                <div class="col-sm-3">
+                                    <span th:if="${pblmView.fileType == null}">
+
+                                    </span>
+                                    <span th:if="${pblmView.fileType == 'image/png'} OR ${pblmView.fileType == 'image/jpeg'}">
+                                        <img onclick="onClick(this)" class="modal-hover-opacity" th:src="@{${'/uploadFile/' + pblmView.fileName}}" style=" width: 200px; height: 200px;cursor:pointer;">
+                                    </span>
+                                    <span th:if="${pblmView.fileType == 'application/pdf'}">
+                                        <a th:href = "@{${'/uploadFile/' + pblmView.fileName}}" target="_blank"><img th:src="@{/img/pdf.JPG}" style=" width: 200px; height: 200px;cursor:pointer;"></a>
+                                    </span>
+                                    <span th:if="${pblmView.fileType != 'image/png'} AND ${pblmView.fileType != 'image/jpeg'} AND ${pblmView.fileType != 'application/pdf'} AND ${pblmView.fileType != null}">
+                                        <a th:href = "@{${'/uploadFile/' + pblmView.fileName}}" target="_blank"><img th:src="@{/img/file.png}" style=" width: 200px; height: 200px;cursor:pointer,"></a>
+                                    </span>
+                                </div>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                        data-bs-parent="#accordionFlushExample" style="padding-right: 20px; padding-left: 20px;">
+                        <div class="accordion-body">
+                            <div th:each="rep: ${response}">
+                                <div style="text-align: right;"
+                                    th:if="${#httpServletRequest.remoteUser==rep.getAgentRep().getUsername()}">
+                                    <p><span>Date : </span> <span th:text="${rep.dateEnvRep}"></span></p>
+                                    <p></p>
+                                    <p><span>Titre : </span> <span th:text="${rep.libelleRep}"></span></p>
+                                    <p><span>Description : </span> <span th:text="${rep.descriptionRep}"></span></p>
+                                    <p id="img">
+                                        <span th:if="${rep.fileType == 'image/png'} OR ${rep.fileType == 'image/jpeg'}">
+                                            <img onclick="onClick(this)" class="modal-hover-opacity" th:src="@{${'/uploadFile/' + rep.fileName}}" style=" width: 200px; height: 200px;cursor:pointer;">
+                                        </span>
+                                        <span th:if="${rep.fileType == 'application/pdf'}">
+                                            <a th:href = "@{${'/uploadFile/' + rep.fileName}}" target="_blank"><img th:src="@{/img/pdf.JPG}" style=" width: 200px; height: 200px;cursor:pointer;"></a>
+                                        </span>
+                                        <span th:if="${rep.fileType != 'image/png'} AND ${rep.fileType != 'image/jpeg'} AND ${rep.fileType != 'application/pdf'}">
+                                            <a th:href = "@{${'/uploadFile/' + rep.fileName}}" target="_blank"><img th:src="@{/img/file.png}" style=" width: 200px; height: 200px;cursor:pointer;"></a>
+                                        </span>
+                                    </p>
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <div th:unless="${#httpServletRequest.remoteUser==rep.getAgentRep().getUsername()}">
+                                    <p><span>Date : </span> <span th:text="${rep.dateEnvRep}"></span></p>
+                                    <p></p>
+                                    <p><span>Titre : </span> <span th:text="${rep.libelleRep}"></span></p>
+                                    <p><span>Description : </span> <span th:text="${rep.descriptionRep}"></span></p>
+                                    <p id="img">
+                                        <span th:if="${rep.fileType == 'image/png'} OR ${rep.fileType == 'image/jpeg'}">
+                                            <img onclick="onClick(this)" class="modal-hover-opacity" th:src="@{${'/uploadFile/' + rep.fileName}}" style=" width: 200px; height: 200px;cursor:pointer;">
+                                        </span>
+                                        <span th:if="${rep.fileType == 'application/pdf'}">
+                                            <a th:href = "@{${'/uploadFile/' + rep.fileName}}" target="_blank"><img th:src="@{/img/pdf.JPG}" style=" width: 200px; height: 200px;cursor:pointer;"></a>
+                                        </span>
+                                        <span th:if="${rep.fileType != 'image/png'} AND ${rep.fileType != 'image/jpeg'} AND ${rep.fileType != 'application/pdf'}">
+                                            <a th:href = "@{${'/uploadFile/' + rep.fileName}}" target="_blank"><img th:src="@{/img/file.png}" style=" width: 200px; height: 200px;cursor:pointer,"></a>
+                                        </span>
+                                    </p>
+                                </div>
+                                <hr>
+                            </div>
+                            <span th:if="${pblmView.statut.idStatut == 3}">
+                                Problème résolu sur dernier réponse
+                            </span>
+                            <span th:unless="${pblmView.statut.idStatut == 3}">
+                            <span
+                                th:if="${#httpServletRequest.remoteUser!=lasteResponse?.getAgentRep()?.getUsername()}">
+
+                                <span th:if="${#httpServletRequest.remoteUser==orgPrblm.getUsername()}">
+                                    <button type="button" class="btn btn-primary" th:data-parameter="${pblmView.idProb}"
+                                        th:onclick="resolvePrbm(this.getAttribute('data-parameter'));">Mettre en
+                                        résolu</button></span>
+                                <form th:object="${reponseForm}" th:action="@{/addRep}" method="post"  enctype="multipart/form-data">
+                                <input type="hidden" id="source" name="idProb" th:value="${pblmView.getIdProb()}">
+                                <input type="text" class="form-control" placeholder="Libelle" id="repAddLibel" th:field="${reponseForm.libelleRep}">
+                                <textarea class="form-control" style="height: 100px" placeholder="Description" id="repAdd" th:field="${reponseForm.descriptionRep}"></textarea>
+                                <input type="file" name="file" class="form-control" id="file">
+                                <!-- id="repAddImg"  th:data-parameter="${pblmView.idProb}" th:onclick="addReponse(this.getAttribute('data-parameter'));" -->
+                                <button type="submit" class="btn btn-light repbtn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Répondre" >
+                                    <i class="bi bi-reply-fill"></i>
+                                </button></form>
+                            </span>
+                            </span> 
+                        </div>
+                    </div>
+
+                </div><!-- End Accordion without outline borders -->
+
+        </section>
+    </main><!-- End #main -->
+    <div id="modal01" class="modal" onclick="this.style.display='none'">
+        <span class="close">&times;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <div class="modal-content">
+          <img id="img01" style="max-width:100%">
+        </div>
+      </div>
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
+
+    <!-- Vendor JS Files -->
+    <script th:src="@{/vendor/apexcharts/apexcharts.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/vendor/chart.js/chart.min.js}"></script>
+    <script th:src="@{/vendor/echarts/echarts.min.js}"></script>
+    <script th:src="@{/vendor/quill/quill.min.js}"></script>
+    <script th:src="@{/vendor/simple-datatables/simple-datatables.js}"></script>
+    <script th:src="@{/vendor/tinymce/tinymce.min.js}"></script>
+    <script th:src="@{/vendor/php-email-form/validate.js}"></script>
+
+    <!-- Template Main JS File -->
+    <script th:src="@{/js/main.js}"></script>
+
+    <script type="text/javascript">                         
+        function onClick(element) {
+            document.getElementById("img01").src = element.src;
+            document.getElementById("modal01").style.display = "block";
+            document.getElementById("modal01").style.zIndex = 999;
+        }   
+
+        var selectedprb = 0;
+        $(document).ready(function(){
+
+        });
+
+        function getImg(idRep) {
+            var urlString = "[[@{'/download/'}]]" + idRep;
+            $.ajax({ methode: "GET", url: urlString })
+              .done(function (fileName) {
+                console.log(fileName);
+                $("#img").html('<img src="././static/uploadFile/' + fileName + '" style="width:100px; hegth:100px"/>');
+              })
+              .fail(function () {
+                //alert("Error get data");
+              });
+    }
+
+        function resolvePrbm(idProb) {
+            var urlString = "[[@{'/resolveprbm/'}]]" + idProb;
+
+            $.ajax({ methode: "GET", url: urlString })
+                .done(function (responseJson) {
+                    location.reload();
+                })
+                .fail(function () {
+                    //alert("Error get data");
+                });
+        }
+
+        
+    </script>
+
+</body>
+
+</html>
